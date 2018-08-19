@@ -15,6 +15,14 @@
 %%====================================================================
 
 start(_StartType, _StartArgs) ->
+    Dispatch = cowboy_router:compile([
+        {'_', [
+            {"/", toppage_handler, []}
+        ]}
+    ]),
+    {ok, _} = cowboy:start_clear(http, [{port, 8010}], #{
+        env => #{dispatch => Dispatch}
+    }),
     bloom_sup:start_link().
 
 %%--------------------------------------------------------------------
